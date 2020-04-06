@@ -2,6 +2,8 @@ import './styles.css';
 import imageList from './templates/imageList.hbs';
 import InfiniteScroll from 'infinite-scroll/js/index';
 import 'material-design-icons/iconfont/material-icons.css';
+import PNotify from '../node_modules/pnotify/dist/es/PNotify';
+
 
 const refs = {
     searchForm: document.querySelector('#search-form'),
@@ -16,11 +18,16 @@ function searchFormSubmit(e) {
     e.preventDefault();
     refs.galleryItems.innerHTML = '';
     infScrollInstance.pageIndex = 1;
-
     const form = e.currentTarget;
     const input = form.elements.query;
     inputValue = input.value;
-    infScrollInstance.loadNextPage();    
+    if (inputValue === '') {
+      PNotify.error({
+          text: 'Еще раз повтори!)',
+      });
+  } else {
+      infScrollInstance.loadNextPage();
+  }    
 };
 
 const infScrollInstance = new InfiniteScroll(refs.galleryItems, {
